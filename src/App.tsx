@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Brain, Send, FileText, Presentation, Sparkles } from 'lucide-react';
 import { MasterAgent } from './agents/masterAgent';
-import { AgentTask, FinalReport } from './types';
+import { AgentTask, ReportOutput } from './types';
 import { AgentCard } from './components/AgentCard';
 import { Report } from './components/Report';
 import { PPTSlides } from './components/PPTSlides';
@@ -18,7 +18,7 @@ function App() {
   const [prompt, setPrompt] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [tasks, setTasks] = useState<AgentTask[]>([]);
-  const [report, setReport] = useState<FinalReport | null>(null);
+  const [report, setReport] = useState<ReportOutput | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('chat');
   const [hasExecuted, setHasExecuted] = useState(false);
 

@@ -8,98 +8,114 @@ export interface AgentResult {
   duration?: number;
 }
 
-export interface MarketInsight {
-  disease: string;
-  marketSize: string;
-  cagr: string;
-  competition: string;
-  topCompetitors: string[];
-  unmetNeed: string;
-  patientPopulation: string;
-}
-
-export interface EXIMData {
-  molecule: string;
-  importDependency: string;
-  exportPotential: string;
-  sourcingCountries: string[];
-  tradeRisk: string;
-  tariffImpact: string;
-}
-
-export interface PatentData {
-  molecule: string;
-  activePatents: number;
-  expiryTimeline: string;
-  ftoRisk: string;
-  filingDensity: string;
-  keyPatents: Array<{
-    id: string;
-    title: string;
-    expiry: string;
-    owner: string;
+export interface IQVIAOutput {
+  marketSizeTable: Array<{
+    therapyArea: string;
+    indication: string;
+    marketSizeUSDMn: string;
+    cagr: string;
+    competitionIntensity: string;
+  }>;
+  growthTrend: string;
+  competitorTable: Array<{
+    company: string;
+    molecule: string;
+    marketShare: string;
   }>;
 }
 
-export interface ClinicalTrialData {
-  molecule: string;
-  indication: string;
-  ongoingTrials: number;
-  phases: {
-    phase1: number;
-    phase2: number;
-    phase3: number;
-    phase4: number;
+export interface EXIMOutput {
+  tradeTable: Array<{
+    moleculeApi: string;
+    importVolumeMT: string;
+    importValueUSDMn: string;
+    exportVolumeMT: string;
+    topImportCountries: string;
+  }>;
+  bulletInsights: {
+    importDependency: string;
+    supplyChainRisk: string;
+    localizationOpportunity: string;
   };
-  topSponsors: string[];
-  geographies: string[];
-  successRate: string;
 }
 
-export interface InternalKnowledge {
-  topic: string;
-  keyInsights: string[];
-  strategicGaps: string[];
-  priorRecommendations: string[];
-  relevance: string;
-}
-
-export interface WebIntelligence {
-  topic: string;
-  guidelines: string[];
-  publications: Array<{
-    title: string;
-    source: string;
-    year: number;
+export interface PatentOutput {
+  patentTable: Array<{
+    patentId: string;
+    assignee: string;
+    geography: string;
+    filingYear: string;
+    expiryYear: string;
+    status: string;
   }>;
-  rwe: string[];
-  news: string[];
-  unmetNeeds: string[];
+  ftoRiskFlags: {
+    overallFTORisk: string;
+    keyBlockingPatents: string;
+  };
 }
 
-export interface InnovationStory {
-  molecule: string;
-  indication: string;
-  dosageForm: string;
-  targetPopulation: string;
-  unmetNeed: string;
-  competitiveGap: string;
-  clinicalFeasibility: string;
-  patentSafety: string;
-  commercialRationale: string;
-  estimatedRevenue: string;
-  timeToMarket: string;
-  investmentRequired: string;
+export interface ClinicalOutput {
+  trialsTable: Array<{
+    trialId: string;
+    indication: string;
+    phase: string;
+    status: string;
+    sponsorType: string;
+  }>;
+  pipelineSummary: {
+    totalActiveTrials: number;
+    phaseDistribution: {
+      phase1: number;
+      phase2: number;
+      phase3: number;
+      phase4: number;
+    };
+    clinicalMaturity: string;
+  };
 }
 
-export interface FinalReport {
+export interface InternalInsightsOutput {
+  keyTakeaways: string[];
+  strategicSignals: {
+    strategicAlignment: string;
+    pastLearnings: string;
+  };
+  pdfExtractSummary: string[];
+}
+
+export interface WebIntelligenceOutput {
+  treatmentGuidelines: string[];
+  realWorldEvidence: string[];
+  newsAndPolicy: string[];
+  hyperlinkReferences: Array<{
+    title: string;
+    url: string;
+  }>;
+}
+
+export interface ReportOutput {
   executiveSummary: string;
-  marketOpportunity: MarketInsight;
-  patentLandscape: PatentData;
-  clinicalEvidence: ClinicalTrialData;
-  tradeFeasibility: EXIMData;
-  innovationStory: InnovationStory;
-  recommendations: string[];
+  iqviaInsights: IQVIAOutput;
+  eximTrends: EXIMOutput;
+  patentLandscape: PatentOutput;
+  clinicalTrials: ClinicalOutput;
+  internalInsights: InternalInsightsOutput;
+  webIntelligence: WebIntelligenceOutput;
+  innovationRecommendation: {
+    molecule: string;
+    indication: string;
+    dosageForm: string;
+    targetPopulation: string;
+    unmetNeed: string;
+    competitiveGap: string;
+    clinicalFeasibility: string;
+    patentSafety: string;
+    commercialRationale: string;
+    estimatedRevenue: string;
+    timeToMarket: string;
+    investmentRequired: string;
+  };
+  strategicRecommendations: string[];
   nextSteps: string[];
   generatedAt: string;
 }
