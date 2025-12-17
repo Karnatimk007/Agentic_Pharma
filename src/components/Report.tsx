@@ -1,88 +1,25 @@
 import { ReportOutput } from '../types';
 import { IQVIAOutput_Display, EXIMOutput_Display, PatentOutput_Display, ClinicalOutput_Display, InternalInsightsOutput_Display, WebIntelligenceOutput_Display } from './StrictFormatOutput';
-import { Lightbulb, CheckCircle2, Download } from 'lucide-react';
+import { MarketSizeChart, CompetitorMarketShareChart, ClinicalTrialsDistributionChart, PatentExpiryChart, ImportExportAnalysisChart } from './DataCharts';
+import { ExportButtons } from './ExportReports';
+import { Lightbulb, CheckCircle2 } from 'lucide-react';
 
 interface ReportProps {
   report: ReportOutput;
 }
 
 export function Report({ report }: ReportProps) {
-  const downloadReport = () => {
-    const reportText = `PHARMA INNOVATION EXECUTIVE REPORT
-=====================================
-Generated: ${new Date(report.generatedAt).toLocaleString()}
-
-EXECUTIVE SUMMARY
-${report.executiveSummary}
-
----
-
-AGENT OUTPUTS
-
-1. IQVIA INSIGHTS
-Market Size: ${report.iqviaInsights.marketSizeTable[0].marketSizeUSDMn} USD Mn
-CAGR: ${report.iqviaInsights.marketSizeTable[0].cagr}
-Competition: ${report.iqviaInsights.marketSizeTable[0].competitionIntensity}
-
-2. PATENT LANDSCAPE
-FTO Risk: ${report.patentLandscape.ftoRiskFlags.overallFTORisk}
-Active Patents: ${report.patentLandscape.patentTable.length}
-
-3. CLINICAL TRIALS
-Total Active Trials: ${report.clinicalTrials.pipelineSummary.totalActiveTrials}
-Clinical Maturity: ${report.clinicalTrials.pipelineSummary.clinicalMaturity}
-
-4. EXIM TRENDS
-Import Dependency: ${report.eximTrends.bulletInsights.importDependency}
-Supply Chain Risk: ${report.eximTrends.bulletInsights.supplyChainRisk}
-
----
-
-INNOVATION RECOMMENDATION
-
-Molecule: ${report.innovationRecommendation.molecule}
-Indication: ${report.innovationRecommendation.indication}
-Dosage Form: ${report.innovationRecommendation.dosageForm}
-Target Population: ${report.innovationRecommendation.targetPopulation}
-
-Commercial Summary:
-Revenue Potential: ${report.innovationRecommendation.estimatedRevenue}
-Time to Market: ${report.innovationRecommendation.timeToMarket}
-Investment Required: ${report.innovationRecommendation.investmentRequired}
-
----
-
-STRATEGIC RECOMMENDATIONS
-${report.strategicRecommendations.map((rec, i) => `${i + 1}. ${rec}`).join('\n')}
-
-NEXT STEPS
-${report.nextSteps.map((step, i) => `${i + 1}. ${step}`).join('\n')}
-`;
-
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(reportText));
-    element.setAttribute('download', 'Innovation_Report.txt');
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  };
-
   return (
-    <div className="space-y-6">
+    <div id="report-content" className="space-y-6">
       <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 rounded-xl p-8 text-white shadow-xl">
         <div className="flex justify-between items-start mb-4">
           <div>
             <h2 className="text-3xl font-bold mb-4">Executive Innovation Report</h2>
             <p className="text-blue-100 leading-relaxed">{report.executiveSummary}</p>
           </div>
-          <button
-            onClick={downloadReport}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors whitespace-nowrap"
-          >
-            <Download className="w-4 h-4" />
-            Download
-          </button>
+          <div className="flex flex-col gap-2">
+            <ExportButtons report={report} />
+          </div>
         </div>
         <div className="mt-4 text-xs text-blue-200">
           Generated: {new Date(report.generatedAt).toLocaleString()}
@@ -96,6 +33,19 @@ ${report.nextSteps.map((step, i) => `${i + 1}. ${step}`).join('\n')}
         <EXIMOutput_Display data={report.eximTrends} />
         <InternalInsightsOutput_Display data={report.internalInsights} />
         <WebIntelligenceOutput_Display data={report.webIntelligence} />
+      </div>
+
+      <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border-2 border-blue-200">
+        <h3 className="text-xl font-bold text-gray-900 mb-6">Analytical Visualizations</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <MarketSizeChart data={report.iqviaInsights} />
+          <CompetitorMarketShareChart data={report.iqviaInsights} />
+          <ClinicalTrialsDistributionChart data={report.clinicalTrials} />
+          <PatentExpiryChart data={report.patentLandscape} />
+          <div className="lg:col-span-2">
+            <ImportExportAnalysisChart data={report.eximTrends} />
+          </div>
+        </div>
       </div>
 
       <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200">
